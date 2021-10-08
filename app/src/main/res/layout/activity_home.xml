@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="false"
+    android:layout_centerHorizontal="false"
+    android:layout_centerVertical="false"
+    android:background="#87BBE4"
+    android:orientation="vertical"
+    tools:context=".Home">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/wy" />
+
+
+    <TextView
+        android:id="@+id/regname"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:fontFamily="@font/baloo"
+        android:text=""
+        android:textColor="#4F5B65"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/baloo"
+        android:text="Welcome Back!"
+        android:textColor="#4F5B65"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/regmob01"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="#B7D2E8"
+        android:fontFamily="@font/baloo"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#4F5B65"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/regmob02"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="#B7D2E8"
+        android:fontFamily="@font/baloo"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#4F5B65"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/regmob03"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="#B7D2E8"
+        android:fontFamily="@font/baloo"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#4F5B65"
+        android:textSize="20dp" />
+
+    <Switch
+        android:id="@+id/travellingAloneMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/alef"
+        android:text="Enable Travelling Alone Mode  "
+        android:textColor="#4F5B65"
+        android:textSize="16dp" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

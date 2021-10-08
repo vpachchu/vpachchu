@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="false"
+    android:layout_centerHorizontal="false"
+    android:layout_centerVertical="false"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/wy" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/baloo"
+        android:text="Enter Your Name"
+        android:textColor="#55ADF3"
+        android:textSize="16sp" />
+    <!--Edit text to enter course name-->
+    <EditText
+        android:id="@+id/idEdtName"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_border"
+        android:fontFamily="@font/baloo"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/baloo"
+        android:text="Create Username"
+        android:textColor="#55ADF3"
+        android:textSize="16sp" />
+
+    <!--edit text to enter course duration-->
+    <EditText
+        android:id="@+id/idEdtUserName"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_border"
+        android:fontFamily="@font/baloo"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/baloo"
+        android:text="Enter 3 trusted Mobile Number"
+        android:textColor="#55ADF3"
+        android:textSize="16sp" />
+
+
+    <!--edit text to display course tracks-->
+    <EditText
+        android:id="@+id/idEdtMob01"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_border"
+        android:fontFamily="@font/baloo"
+        android:inputType="numberSigned"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <!--edit text to display course tracks-->
+    <EditText
+        android:id="@+id/idEdtMob02"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_border"
+        android:fontFamily="@font/baloo"
+        android:inputType="numberSigned"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <!--edit text to display course tracks-->
+    <EditText
+        android:id="@+id/idEdtMob03"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_border"
+        android:fontFamily="@font/baloo"
+        android:inputType="numberSigned"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/baloo"
+        android:text="Create a Keyword"
+        android:textColor="#55ADF3"
+        android:textSize="16sp" />
+
+    <!--edit text for course description-->
+    <EditText
+        android:id="@+id/idEdtKeyWord"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_text_border"
+        android:fontFamily="@font/baloo"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp" />
+
+    <!--button for adding new course-->
+    <Button
+        android:id="@+id/idBtnSignUP"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/edit_button_border"
+        android:fontFamily="@font/baloo"
+        android:text="Signup"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+
+</LinearLayout>
