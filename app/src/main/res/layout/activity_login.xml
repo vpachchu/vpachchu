@@ -98,7 +98,7 @@
         android:layout_marginBottom="160dp"
         android:background="@drawable/edit_button_border"
         android:fontFamily="@font/baloo"
-        android:text="Login"
+        android:text="GO"
         android:textColor="#FAFAFA"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -11,7 +11,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -68,20 +70,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         showUserData();
 
 
+        travalAlone.setChecked(false);
         travalAlone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                getLocationUpdates();
+                if (travalAlone.isChecked()==true)
+                {
+                    readChanges();
+                    getLocationUpdates();
+                    sendMessage();
 
-                readChanges();
-
-
-
-
+                }
 
             }
         });
+
 
         //FirebaseDatabase.getInstance().getReference().child("user-location").setValue("new data");
 
@@ -97,10 +101,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    private void sendMessage() {
+        Intent intent=getIntent();
+        String name=intent.getStringExtra("personName");
+        String Mob01=intent.getStringExtra("personMob01");
+        String Mob02=intent.getStringExtra("personMob02");
+        String Mob03=intent.getStringExtra("personMob03");
+
+        String SMS="Hi! I'm travelling alone! Please keep track on my location.. GPS link :";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.SEND_SMS)==PackageManager.PERMISSION_GRANTED)
+            {
+                try {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(Mob01, null, SMS, null, null);
+                    smsManager.sendTextMessage(Mob02, null, SMS, null, null);
+                    smsManager.sendTextMessage(Mob03, null, SMS, null, null);
+                    Toast.makeText(this, "Message is sent", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Faild to send message", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else
+            {
+                requestPermissions(new String[]{Manifest.permission.SEND_SMS},1);
+            }
+        }
+
+    }
+
     private void showUserData() {
 
         Intent intent = getIntent();
-        String user_name = intent.getStringExtra("personUserName");
+        String user_name = intent.getStringExtra("personName");
         String user_username = intent.getStringExtra("personMob01");
 
 

@@ -4,25 +4,108 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:backgroundTint="#55ADF3">
+    android:background="#FFFFFF"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="276dp"
+        android:layout_marginEnd="160dp"
+        android:fontFamily="@font/baloo"
+        android:text="Our Goal Is to"
+        android:textColor="#55ADF3"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.382"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="332dp"
+        android:layout_marginEnd="160dp"
+        android:fontFamily="@font/baloo"
+        android:text="Protect you !"
+        android:textColor="#55ADF3"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.382"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/wy"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="141dp"
         android:layout_height="52dp"
+
         android:layout_marginStart="160dp"
         android:layout_marginEnd="160dp"
-        android:layout_marginBottom="230dp"
-        android:backgroundTint="#000000"
+        android:layout_marginBottom="140dp"
+        android:background="@drawable/edit_button_border"
         android:fontFamily="@font/baloo"
-        android:outlineProvider="paddedBounds"
         android:text="Login"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/edit_button_border"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
+
+<!--    <Button-->
+<!--        android:id="@+id/button4"-->
+<!--        android:layout_width="220dp"-->
+<!--        android:layout_height="30dp"-->
+
+<!--        android:layout_marginStart="160dp"-->
+<!--        android:layout_marginEnd="160dp"-->
+<!--        android:layout_marginBottom="68dp"-->
+<!--        android:background="@drawable/edit_button_border"-->
+<!--        android:backgroundTint="#000000"-->
+<!--        android:fontFamily="@font/baloo"-->
+<!--        android:text="Start Background Process"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="14sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <TextView
+        android:id="@+id/testtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        tools:layout_editor_absoluteX="11dp"
+        tools:layout_editor_absoluteY="7dp" />
+
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/testtext"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="250dp"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        tools:layout_editor_absoluteX="168dp" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/testtext2"-->
+    <!--        android:layout_width="123dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_marginTop="200dp"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        tools:layout_editor_absoluteX="168dp" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
