@@ -1,19 +1,25 @@
 package com.example.with_you;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.telephony.SmsManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,7 +40,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
@@ -44,6 +52,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager manager;
     private final int MIN_TIME = 1000;//1 sec
     private final int MIN_DISTANCE = 1;//1 meter
+
+    TextView test01;
+
+    private static final int REQUEST_CODE_SPEECH_INPUT = 20000;
+
 
     Switch travalAlone;
     TextView name;
@@ -55,6 +68,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        test01=findViewById(R.id.test02);
 
         manager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -98,6 +113,80 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
+
+    }
+
+    @SuppressLint("RestrictedApi")
+    public boolean dispatchKeyEvent(KeyEvent event) {
+
+        int action,keycode;
+
+        action=event.getAction();
+        keycode=event.getKeyCode();
+
+        switch (keycode) {
+            case KeyEvent.KEYCODE_VOLUME_UP: {
+                if (KeyEvent.ACTION_UP ==action)
+                {
+                    emergency();
+
+                    // test.setText("Hello");
+                }
+            }
+
+        }
+
+        return super.dispatchKeyEvent(event);
+
+
+
+
+    }
+
+
+    private void emergency() {
+        Intent intent=getIntent();
+        String Mob01=intent.getStringExtra("personMob01");
+        String Mob02=intent.getStringExtra("personMob02");
+        String Mob03=intent.getStringExtra("personMob03");
+
+        String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location : ";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED)
+            {
+                try {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(Mob01, null, SMS, null, null);
+                    smsManager.sendTextMessage(Mob02, null, SMS, null, null);
+                    smsManager.sendTextMessage(Mob03, null, SMS, null, null);
+                    Toast.makeText(MapsActivity.this, "Message is sent", Toast.LENGTH_SHORT).show();
+
+                    // playSound
+
+                    AssetFileDescriptor afd = getAssets().openFd("BirdNotificationTone.mp3");
+                    MediaPlayer player = new MediaPlayer();
+                    player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                    player.prepare();
+                    player.start();
+
+                    //Call Action
+
+
+
+
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(MapsActivity.this, "Failed to send message", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else
+            {
+                requestPermissions(new String[]{Manifest.permission.SEND_SMS},1);
+            }
+        }
 
     }
 

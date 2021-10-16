@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -37,6 +38,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SPEECH_INPUT = 20000;
+    private static final int REQUEST_CALL=1;
     private Button login, BackgroundProcessBtn;
     private TextView test,test2;
     MediaPlayer player;
@@ -184,9 +186,27 @@ public class MainActivity extends AppCompatActivity {
                     String Mob02=users.getPersonMob02();
                     String Mob03=users.getPersonMob03();
 
-                    String mn01="tel: "+Mob01;
-                    Intent callintent=new Intent(Intent.ACTION_CALL);
-                    callintent.setData(Uri.parse(mn01));
+                    if(Mob01.trim().length()>0)
+                    {
+                        if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
+                        {
+                            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.CALL_PHONE},REQUEST_CALL);
+                        }
+                        else
+                        {
+                            String dial ="tel:"+Mob01;
+                            startActivity(new Intent(Intent.ACTION_CALL,Uri.parse(dial)));
+                            Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else
+                    {
+
+                    }
+
+                    //String mn01="tel: "+Mob01;
+//                    Intent callintent=new Intent(Intent.ACTION_CALL);
+//                    callintent.setData(Uri.parse("tel:0772540515"));
                     //test2.setText(mob01);
                     String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location : ";
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -199,7 +219,13 @@ public class MainActivity extends AppCompatActivity {
                                 smsManager.sendTextMessage(Mob03, null, SMS, null, null);
                                 Toast.makeText(MainActivity.this, "Message is sent", Toast.LENGTH_SHORT).show();
 
-                                playSound();
+                               // playSound
+
+                                AssetFileDescriptor afd = getAssets().openFd("BirdNotificationTone.mp3");
+                                MediaPlayer player = new MediaPlayer();
+                                player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                                player.prepare();
+                                player.start();
 
                                 //Call Action
 
@@ -225,20 +251,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
-
-    private void playSound(View v) {
-        if (player==null)
-        {
-            player = MediaPlayer.create(this,R.raw.BirdNotificationTone.mp3);
-        }
-
-    }
+    //@Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode==REQUEST_CALL)
+//        {
+//            if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+//
+//            }
+//        }
+//    }
 
     private void openLogin() {
         Intent intent=new Intent(this,Login.class);

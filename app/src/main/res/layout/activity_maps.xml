@@ -34,6 +34,17 @@
         android:textSize="30dp" />
 
     <TextView
+        android:id="@+id/test02"
+        android:layout_width="300dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/baloo"
+        android:text=""
+        android:textColor="#82C3F6"
+        android:textSize="30dp" />
+
+    <TextView
         android:id="@+id/welcome"
         android:layout_width="300dp"
         android:layout_height="60dp"
