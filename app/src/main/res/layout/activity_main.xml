@@ -65,6 +65,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+
+    <Button
+        android:id="@+id/guardian"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+
+        android:layout_marginStart="160dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="68dp"
+        android:background="@drawable/edit_button_border"
+        android:backgroundTint="#000000"
+        android:fontFamily="@font/baloo"
+        android:text="Im a Guardian"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 <!--    <Button-->
 <!--        android:id="@+id/button4"-->
 <!--        android:layout_width="220dp"-->
@@ -93,13 +112,15 @@
         tools:layout_editor_absoluteY="7dp" />
 
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/testtext"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="250dp"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        tools:layout_editor_absoluteX="168dp" />-->
+        <TextView
+            android:id="@+id/testtext2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="168dp"
+            android:textColor="#FFFFFF"
+            />
 
     <!--    <TextView-->
     <!--        android:id="@+id/testtext2"-->

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,8 +26,8 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         signup=(Button) findViewById(R.id.button3);
-        login=(Button) findViewById(R.id.button2);
-        loginusername=(EditText) findViewById(R.id.loginusername);
+        login=(Button) findViewById(R.id.trackbtn);
+        loginusername=(EditText) findViewById(R.id.guserusername);
         loginkeyword=(EditText) findViewById(R.id.loginkeyword);
         DB=new DatabaseHelper(this);
 

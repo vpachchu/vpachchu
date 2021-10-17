@@ -3,6 +3,7 @@ package com.example.with_you;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
@@ -25,7 +26,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.with_you.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -47,7 +47,6 @@ import java.util.Locale;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
-    private ActivityMapsBinding binding;
     private DatabaseReference reference;
     private LocationManager manager;
     private final int MIN_TIME = 1000;//1 sec
@@ -83,6 +82,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         travalAlone=findViewById(R.id.travellingAloneMode);
 
         showUserData();
+        readChanges();
+        getLocationUpdates();
 
 
         travalAlone.setChecked(false);
@@ -92,8 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if (travalAlone.isChecked()==true)
                 {
-                    readChanges();
-                    getLocationUpdates();
+
                     sendMessage();
 
                 }
@@ -149,8 +149,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String Mob01=intent.getStringExtra("personMob01");
         String Mob02=intent.getStringExtra("personMob02");
         String Mob03=intent.getStringExtra("personMob03");
+        String username=intent.getStringExtra("personUserName");
 
-        String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location : ";
+        String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location using With you! application, enter UserName : '"+username+"'" ;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(checkSelfPermission(Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED)
             {
@@ -196,8 +197,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String Mob01=intent.getStringExtra("personMob01");
         String Mob02=intent.getStringExtra("personMob02");
         String Mob03=intent.getStringExtra("personMob03");
+        String username=intent.getStringExtra("personUserName");
 
-        String SMS="Hi! I'm travelling alone! Please keep track on my location.. GPS link :";
+
+        String SMS="Hi! I'm travelling alone! Please keep track on my location.. enter username : '"+username+"'";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(checkSelfPermission(Manifest.permission.SEND_SMS)==PackageManager.PERMISSION_GRANTED)
             {
@@ -241,7 +244,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             myMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
                         }
                     } catch (Exception e) {
-                        Toast.makeText(MapsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                     //   Toast.makeText(MapsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -263,10 +266,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 } else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
                 } else {
+                    if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+                        ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+                    }
                     Toast.makeText(this, "Please enable GPS and Network Provider", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
 
             }
         }
@@ -276,11 +285,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 101) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == 101)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
                 getLocationUpdates();
-            } else {
-                Toast.makeText(this, "Please enable GPS and Network Provider", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+                    ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+                }
             }
         }
     }
@@ -336,7 +353,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         else
         {
-            Toast.makeText(this, "Please enable GPS and Network Provider", Toast.LENGTH_SHORT).show();
+
         }
 
     }

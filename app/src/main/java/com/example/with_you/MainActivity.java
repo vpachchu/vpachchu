@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -26,6 +28,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,15 +41,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_CODE_SPEECH_INPUT = 20000;
     private static final int REQUEST_CALL=1;
-    private Button login, BackgroundProcessBtn;
+    private Button login, BackgroundProcessBtn, guardian;
     private TextView test,test2;
     MediaPlayer player;
   //  private int STORAGE_PERMISSION_CODE=1;
+    private LocationManager manager;
 
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference,databaseReference1,reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +58,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
       test=findViewById(R.id.testtext);
-//        test2=findViewById(R.id.testtext2);
+      test2=findViewById(R.id.testtext2);
       //  BackgroundProcessBtn=(Button)findViewById(R.id.button4);
         login=(Button) findViewById(R.id.button);
+        guardian=(Button)findViewById(R.id.guardian);
+        guardian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGuardian();
+            }
+        });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
                     });
+
+
+
+        databaseReference1=FirebaseDatabase.getInstance().getReference().child("user-location");
 
 
 //       BackgroundProcessBtn.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
      }
 
     }
+
+
 
     private void callPermission() {
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -104,6 +123,24 @@ public class MainActivity extends AppCompatActivity {
 //
 //    }
 
+
+
+    public void OnLocationChanged(Location location)
+    {
+        if(location!=null)
+        {
+            saveLocation(location);
+        }
+        else
+        {
+            Toast.makeText(this, "Enable GPS", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveLocation(Location location) {
+        databaseReference1.setValue(location);
+
+    }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -128,6 +165,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 
@@ -186,6 +228,20 @@ public class MainActivity extends AppCompatActivity {
                     String Mob02=users.getPersonMob02();
                     String Mob03=users.getPersonMob03();
 
+                    String username=users.getPersonUserName();
+
+                    //Map loading
+
+
+
+
+
+
+
+
+
+                    test2.setText(username);
+
                     if(Mob01.trim().length()>0)
                     {
                         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
@@ -208,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
 //                    Intent callintent=new Intent(Intent.ACTION_CALL);
 //                    callintent.setData(Uri.parse("tel:0772540515"));
                     //test2.setText(mob01);
-                    String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location : ";
+                    String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location Using With you! application, enter UserName : '"+username+"'";
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if(checkSelfPermission(Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED)
                         {
@@ -278,4 +334,44 @@ public class MainActivity extends AppCompatActivity {
 //        intent.setData(Uri.parse(mn01));
 
     }
+
+    private void openGuardian() {
+
+       // Intent intent=new Intent(this,Guardian.class);
+        //startActivity(intent);
     }
+
+    private void readChanges() {
+
+        String Username=test2.getText().toString();
+        reference = FirebaseDatabase.getInstance().getReference().child("user-location").child(Username);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    try {
+                        MyLocation location = snapshot.getValue(MyLocation.class);
+                        if (location != null) {
+                           // myMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+    }
+}
