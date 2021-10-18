@@ -337,13 +337,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void openGuardian() {
 
-       // Intent intent=new Intent(this,Guardian.class);
-        //startActivity(intent);
+       Intent intent=new Intent(this,Guardian.class);
+        startActivity(intent);
     }
 
     private void readChanges() {
 
         String Username=test2.getText().toString();
+
         reference = FirebaseDatabase.getInstance().getReference().child("user-location").child(Username);
 
         reference.addValueEventListener(new ValueEventListener() {

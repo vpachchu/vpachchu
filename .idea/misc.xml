@@ -6,13 +6,15 @@
         <entry key="app/src/main/res/drawable/edit_button_border.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/edit_text_border.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_guardian.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_guardian2.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_guardian2.xml" value="0.10810810810810811" />
+        <entry key="app/src/main/res/layout/activity_guardian_track.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.13333333333333333" />
         <entry key="app/src/main/res/layout/activity_maps2.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_track.xml" value="0.18" />
       </map>
     </option>
   </component>
