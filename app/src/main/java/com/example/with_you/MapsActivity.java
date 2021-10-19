@@ -353,6 +353,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         else
         {
+            Toast.makeText(this, "Enable GPS", Toast.LENGTH_SHORT).show();
 
         }
 

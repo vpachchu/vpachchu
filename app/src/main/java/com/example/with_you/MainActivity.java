@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -41,27 +42,34 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity implements LocationListener {
     private static final int REQUEST_CODE_SPEECH_INPUT = 20000;
     private static final int REQUEST_CALL=1;
     private Button login, BackgroundProcessBtn, guardian;
     private TextView test,test2;
+    private final int MIN_TIME = 1000;//1 sec
+    private final int MIN_DISTANCE = 1;//1 meter
+
     MediaPlayer player;
   //  private int STORAGE_PERMISSION_CODE=1;
     private LocationManager manager;
 
-    DatabaseReference databaseReference,databaseReference1,reference;
+    DatabaseReference databaseReference,databaseReference1,reference,referenceFB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        manager =(LocationManager)getSystemService(LOCATION_SERVICE);
+
       test=findViewById(R.id.testtext);
       test2=findViewById(R.id.testtext2);
       //  BackgroundProcessBtn=(Button)findViewById(R.id.button4);
         login=(Button) findViewById(R.id.button);
         guardian=(Button)findViewById(R.id.guardian);
+
+
         guardian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         databaseReference1=FirebaseDatabase.getInstance().getReference().child("user-location");
+
 
 
 //       BackgroundProcessBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +109,49 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    private void getLocationUpdates() {
+        if (manager != null) {
+            if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+                } else if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+                } else {
+                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+                    }
+                    Toast.makeText(this, "Please enable GPS and Network Provider", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 101)
+        {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                getLocationUpdates();
+            }
+            else {
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+                }
+            }
+        }
+    }
 
     private void callPermission() {
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -123,24 +174,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //
 //    }
 
-
-
-    public void OnLocationChanged(Location location)
-    {
-        if(location!=null)
-        {
-            saveLocation(location);
-        }
-        else
-        {
-            Toast.makeText(this, "Enable GPS", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void saveLocation(Location location) {
-        databaseReference1.setValue(location);
-
-    }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -203,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     test.setText(result.get(0));
 
                     retrieveData();
+                    getLocationUpdates();
                 }
                 break;
             }
@@ -233,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //Map loading
 
 
+                    referenceFB = FirebaseDatabase.getInstance().getReference().child("user-location").child(username);
 
 
 
@@ -241,6 +276,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                     test2.setText(username);
+
+
 
                     if(Mob01.trim().length()>0)
                     {
@@ -305,6 +342,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 }
+
             }
 
 
@@ -341,38 +379,57 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         startActivity(intent);
     }
 
-    private void readChanges() {
-
-        String Username=test2.getText().toString();
-
-        reference = FirebaseDatabase.getInstance().getReference().child("user-location").child(Username);
-
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    try {
-                        MyLocation location = snapshot.getValue(MyLocation.class);
-                        if (location != null) {
-                           // myMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-                        }
-                    } catch (Exception e) {
-                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-
     @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
+    public void onLocationChanged(@NonNull Location location) {
+        if(location!=null)
+        {
+            saveLocation(location);
+        }
+        else
+        {
+            Toast.makeText(this, "Enable GPS", Toast.LENGTH_SHORT).show();
+
+        }
 
     }
+
+    private void saveLocation(Location location) {
+       String username= test2.getText().toString();
+        databaseReference1.child(username).setValue(location);
+    }
+
+//    private void readChanges() {
+//
+//        String Username=test2.getText().toString();
+//
+//        reference = FirebaseDatabase.getInstance().getReference().child("user-location").child(Username);
+//
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    try {
+//                        MyLocation location = snapshot.getValue(MyLocation.class);
+//                        if (location != null) {
+//                           // myMarker.setPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+//                        }
+//                    } catch (Exception e) {
+//                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//
+//
+//    @Override
+//    public void onMapReady(@NonNull GoogleMap googleMap) {
+//
+//    }
 }
