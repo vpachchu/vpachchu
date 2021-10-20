@@ -7,7 +7,7 @@
     android:layout_centerInParent="false"
     android:layout_centerHorizontal="false"
     android:layout_centerVertical="false"
-    android:background="#82C3F6"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".MapsActivity">
 
@@ -31,7 +31,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/baloo"
         android:text=""
-        android:textColor="#4F5B65"
+        android:textColor="#55ADF3"
         android:textSize="30dp" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/baloo"
         android:text=""
-        android:textColor="#82C3F6"
+        android:textColor="#FFFFFF"
         android:textSize="30dp" />
 
     <TextView
@@ -53,8 +53,10 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/baloo"
         android:text="Welcome Back!"
-        android:textColor="#4F5B65"
+        android:textColor="#55ADF3"
         android:textSize="30dp" />
+
+
 
     <Switch
         android:id="@+id/travellingAloneMode"
@@ -64,7 +66,19 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/alef"
         android:text="Enable Travelling Alone Mode  "
-        android:textColor="#4F5B65"
+        android:textColor="#55ADF3"
         android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/emergencytxt"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/baloo"
+        android:text="In case of Emergency Press Volume Button"
+        android:textColor="#293845"
+        android:textSize="13sp" />
 </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -126,7 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         switch (keycode) {
             case KeyEvent.KEYCODE_VOLUME_UP: {
-                if (KeyEvent.ACTION_UP ==action)
+                if (action==KeyEvent.ACTION_UP)
                 {
                     emergency();
 

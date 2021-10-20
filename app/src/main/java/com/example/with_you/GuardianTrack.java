@@ -53,22 +53,23 @@ public class GuardianTrack extends FragmentActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        LatLng srilanka = new LatLng(6.89, 80.59);
 
-        myMarker= mMap.addMarker(new MarkerOptions().position(srilanka).title("Marker in srilanka"));
+        mMap = googleMap;
+       // myMarker= mMap.addMarker(new MarkerOptions().position(srilanka).title("Marker in Srilanka"));
         mMap.setMinZoomPreference(9);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setAllGesturesEnabled(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(srilanka));
+       // mMap.moveCamera(CameraUpdateFactory.newLatLng(srilanka));
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
+
+                    //LatLng srilanka = new LatLng(6.89, 80.59);
                     MyLocation location = snapshot.getValue(MyLocation.class);
                     LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+                    mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Srilanka"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
                 }
             }

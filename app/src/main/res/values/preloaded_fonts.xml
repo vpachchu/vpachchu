@@ -3,5 +3,6 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/alef</item>
         <item>@font/baloo</item>
+        <item>@font/droid_sans</item>
     </array>
 </resources>
