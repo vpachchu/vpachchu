@@ -98,9 +98,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //       });
 
 
-     if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
+     if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
      {
-         Toast.makeText(MainActivity.this, "Permission Already Given!", Toast.LENGTH_SHORT).show();
+         //Toast.makeText(MainActivity.this, "Permission Already Given!", Toast.LENGTH_SHORT).show();
+
+         ActivityCompat.requestPermissions(this,
+                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
      }
      else
      {

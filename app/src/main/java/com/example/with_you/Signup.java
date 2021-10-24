@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class Signup extends AppCompatActivity {
@@ -52,26 +53,68 @@ public class Signup extends AppCompatActivity {
                 String personMob02 = personMob02Edt.getText().toString();
                 String personMob03 = personMob03Edt.getText().toString();
 
-                if(personName.isEmpty()||personKeyword.isEmpty()||personKeyword.isEmpty()||personMob01.isEmpty()||personMob02.isEmpty()||personMob03.isEmpty())
-                {
-                    Toast.makeText(Signup.this, "Please Fill All the fields", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    // below line is to get data from all edit text fields.
+                Query checkUser=reference.orderByChild("personUserName").equalTo(personUserName) ;
+                Query checkKeyword=reference.orderByChild("personKeyword").equalTo(personKeyword) ;
 
-                    UserHelperClass helperClass=new UserHelperClass(personName,personKeyword,personUserName,personMob01,personMob02,personMob03);
-                    {
-                        helperClass.setPersonName(personName);
-                        //reference.child(String.valueOf(uid+1)).setValue(helperClass);
-                        Toast.makeText(Signup.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(getApplicationContext(),Login.class);
-                        startActivity(intent);
+                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists())
+                        {
+                            personUserNameEdt.setError("Username already Exists!");
+                        }
+                        else
+                        {
+                            checkKeyword.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.exists()) {
+                                        personKeywordEdt.setError("already Exists.. Try different keyword");
+                                    }
+                                    else
+                                    {
+                                        if(personName.isEmpty()||personKeyword.isEmpty()||personKeyword.isEmpty()||personMob01.isEmpty()||personMob02.isEmpty()||personMob03.isEmpty())
+                                        {
+                                            Toast.makeText(Signup.this, "Please Fill All the fields", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                        else
+                                        {
+                                            // below line is to get data from all edit text fields.
+
+                                            UserHelperClass helperClass=new UserHelperClass(personName,personKeyword,personUserName,personMob01,personMob02,personMob03);
+                                            {
+                                                helperClass.setPersonName(personName);
+                                                //reference.child(String.valueOf(uid+1)).setValue(helperClass);
+                                                Toast.makeText(Signup.this, "Registration Successful!", Toast.LENGTH_SHORT).show();
+                                                Intent intent=new Intent(getApplicationContext(),Login.class);
+                                                startActivity(intent);
+                                            }
+
+                                            reference.child(personUserName).setValue(helperClass);
+
+                                        }
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+
+
+                                }
+                            });
+
+                        }
                     }
 
-                    reference.child(personUserName).setValue(helperClass);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
+                    }
+                });
+
 
 
             }
@@ -80,10 +123,5 @@ public class Signup extends AppCompatActivity {
 
     }
 
-    public void login()
-    {
 
-
-
-    }
 }
