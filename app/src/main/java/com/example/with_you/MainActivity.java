@@ -21,8 +21,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.RecognizerIntent;
+import android.telecom.TelecomManager;
+import android.telephony.PhoneStateListener;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -48,11 +53,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private Button login, BackgroundProcessBtn, guardian;
     private TextView test,test2;
     private final int MIN_TIME = 1000;//1 sec
-    private final int MIN_DISTANCE = 1;//1 meter
+;    private final int MIN_DISTANCE = 1;//1 meter
 
     MediaPlayer player;
   //  private int STORAGE_PERMISSION_CODE=1;
     private LocationManager manager;
+    TelephonyManager telephonyManager = null;
+    PhoneStateListener listener = new PhoneStateListener();
 
     DatabaseReference databaseReference,databaseReference1,reference,referenceFB;
 
@@ -69,6 +76,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         login=(Button) findViewById(R.id.button);
         guardian=(Button)findViewById(R.id.guardian);
 
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_PHONE_STATE)
+                !=PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},1);
+        }
 
         guardian.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,17 +111,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //       });
 
 
-     if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED)
-     {
-         //Toast.makeText(MainActivity.this, "Permission Already Given!", Toast.LENGTH_SHORT).show();
+//     if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_PHONE_STATE)!=PackageManager.PERMISSION_GRANTED)
+//     {
+//         //Toast.makeText(MainActivity.this, "Permission Already Given!", Toast.LENGTH_SHORT).show();
+//
+//         ActivityCompat.requestPermissions(this,
+//                 new String[]{Manifest.permission.READ_PHONE_STATE},1);
+//     }
+//     else
+//     {
+//         callPermission();
+//     }
 
-         ActivityCompat.requestPermissions(this,
-                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-     }
-     else
-     {
-         callPermission();
-     }
+
 
     }
 
@@ -282,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
 
-                    if(Mob01.trim().length()>0)
+                    if(Mob01.trim().length()>0 &&Mob02.trim().length()>0 && Mob03.trim().length()>0)
                     {
                         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
                         {
@@ -290,9 +305,44 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         }
                         else
                         {
-                            String dial ="tel:"+Mob01;
-                            startActivity(new Intent(Intent.ACTION_CALL,Uri.parse(dial)));
-                            Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+                            int loop= 3;
+                            while (loop>0) {
+                                String dial = "tel:" + Mob01;
+                                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                                Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+                                final Handler handler = new Handler(Looper.getMainLooper());
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String dial2 = "tel:" + Mob02;
+                                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial2)));
+                                        Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }, 50000);
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String dial3 = "tel:" + Mob03;
+                                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial3)));
+                                        Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }, 100000);
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                    }
+                                }, 150000);
+
+                                loop--;
+
+
+                            }
+
                         }
                     }
                     else

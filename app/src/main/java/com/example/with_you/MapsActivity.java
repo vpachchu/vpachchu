@@ -16,8 +16,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.RecognizerIntent;
 import android.telephony.SmsManager;
 import android.view.KeyEvent;
@@ -51,6 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager manager;
     private final int MIN_TIME = 1000;//1 sec
     private final int MIN_DISTANCE = 1;//1 meter
+    private static final int REQUEST_CALL=1;
+
 
     TextView test01;
 
@@ -173,6 +178,55 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //Call Action
 
 
+                    if(Mob01.trim().length()>0 &&Mob02.trim().length()>0 && Mob03.trim().length()>0)
+                    {
+                        if(ContextCompat.checkSelfPermission(MapsActivity.this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
+                        {
+                            ActivityCompat.requestPermissions(MapsActivity.this,new String[]{Manifest.permission.CALL_PHONE},REQUEST_CALL);
+                        }
+                        else
+                        {
+                            int loop= 3;
+                            while (loop>0) {
+                                String dial = "tel:" + Mob01;
+                                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+                                Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+                                final Handler handler = new Handler(Looper.getMainLooper());
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String dial2 = "tel:" + Mob02;
+                                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial2)));
+                                        Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }, 50000);
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String dial3 = "tel:" + Mob03;
+                                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial3)));
+                                        Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }, 100000);
+
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                    }
+                                }, 150000);
+                                loop--;
+                            }
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
 
 
 
