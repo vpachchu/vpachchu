@@ -178,55 +178,62 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //Call Action
 
 
-                    if(Mob01.trim().length()>0 &&Mob02.trim().length()>0 && Mob03.trim().length()>0)
-                    {
+
                         if(ContextCompat.checkSelfPermission(MapsActivity.this,Manifest.permission.CALL_PHONE)!=PackageManager.PERMISSION_GRANTED)
                         {
                             ActivityCompat.requestPermissions(MapsActivity.this,new String[]{Manifest.permission.CALL_PHONE},REQUEST_CALL);
                         }
                         else
                         {
-                            int loop= 3;
-                            while (loop>0) {
-                                String dial = "tel:" + Mob01;
-                                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
-                                Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
 
-                                final Handler handler = new Handler(Looper.getMainLooper());
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String dial2 = "tel:" + Mob02;
-                                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial2)));
-                                        Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+                            if(Mob01.trim().length()>0 && Mob02.trim().length()>0 && Mob03.trim().length()>0)
+                            {
 
-                                    }
-                                }, 50000);
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String dial3 = "tel:" + Mob03;
-                                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial3)));
-                                        Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+                                int loop=3;
+                                while (loop>0) {
+    final Handler handler = new Handler(Looper.getMainLooper());
 
-                                    }
-                                }, 100000);
 
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+    handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            String dial = "tel:" + Mob01;
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
+            Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
 
-                                    }
-                                }, 150000);
-                                loop--;
-                            }
+        }
+    }, 30000);
+    handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            String dial2 = "tel:" + Mob02;
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial2)));
+            Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+        }
+    }, 80000);
+    handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            String dial3 = "tel:" + Mob03;
+            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial3)));
+            Toast.makeText(MapsActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
+
+        }
+    }, 110000);
+    loop=loop-1;
+}
+//                                handler.postDelayed(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//
+//                                    }
+//                                }, 150000);
+
 
                         }
                     }
-                    else
-                    {
 
-                    }
 
 
 
