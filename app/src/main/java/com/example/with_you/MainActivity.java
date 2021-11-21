@@ -1,10 +1,13 @@
 package com.example.with_you;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.location.Location;
@@ -44,6 +47,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -75,13 +79,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
       //  BackgroundProcessBtn=(Button)findViewById(R.id.button4);
         login=(Button) findViewById(R.id.button);
         guardian=(Button)findViewById(R.id.guardian);
-
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_PHONE_STATE)
-                !=PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_PHONE_STATE},1);
-        }
 
         guardian.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             }
         }
+
     }
 
     private void callPermission() {
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         switch (keycode) {
             case KeyEvent.KEYCODE_VOLUME_UP: {
-                if (KeyEvent.ACTION_UP ==action)
+                if (action==KeyEvent.ACTION_UP )
                 {
                     voiceInput();
                    // test.setText("Hello");
@@ -304,14 +302,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         }
                         else
                         {
+
+
                             if(Mob01.trim().length()>0 && Mob02.trim().length()>0 && Mob03.trim().length()>0)
                             {
 
 //                                String dial = "tel:" + Mob01;
 //                                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
 //                                Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
-                                int loop=3;
-                                while (loop>0) {
+
                                     final Handler handler = new Handler(Looper.getMainLooper());
 
 
@@ -342,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                                         }
                                     }, 110000);
-                                }
+
 //                                handler.postDelayed(new Runnable() {
 //                                    @Override
 //                                    public void run() {
@@ -360,49 +359,120 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //                    Intent callintent=new Intent(Intent.ACTION_CALL);
 //                    callintent.setData(Uri.parse("tel:0772540515"));
                     //test2.setText(mob01);
-                    String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location Using With you! application, enter UserName : '"+username+"'";
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if(checkSelfPermission(Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED)
-                        {
-                            try {
-                                SmsManager smsManager = SmsManager.getDefault();
-                                smsManager.sendTextMessage(Mob01, null, SMS, null, null);
-                                smsManager.sendTextMessage(Mob02, null, SMS, null, null);
-                                smsManager.sendTextMessage(Mob03, null, SMS, null, null);
-                                Toast.makeText(MainActivity.this, "Message is sent", Toast.LENGTH_SHORT).show();
+                   String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location Using With you! application, enter UserName : '"+username+"'";
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        if(checkSelfPermission(Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED)
+//                        {
+//                            try {
+//                                SmsManager smsManager = SmsManager.getDefault();
+//                                smsManager.sendTextMessage(Mob01, null, SMS, null, null);
+//                                smsManager.sendTextMessage(Mob02, null, SMS, null, null);
+//                                smsManager.sendTextMessage(Mob03, null, SMS, null, null);
+//                                Toast.makeText(MainActivity.this, "Message is sent", Toast.LENGTH_SHORT).show();
+//
+//                               // playSound
+//
+//                                AssetFileDescriptor afd = getAssets().openFd("BirdNotificationTone.mp3");
+//                                MediaPlayer player = new MediaPlayer();
+//                                player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+//                                player.prepare();
+//                                player.start();
+//
+//                                //Call Action
+//
+//
+//
+//
+//
+//
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                Toast.makeText(MainActivity.this, "Failed to send message", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                        else
+//                        {
+//                            requestPermissions(new String[]{Manifest.permission.SEND_SMS},1);
+//                        }
+//                    }
+                    String SENT = "SMS_SENT";
+                    String DELIVERED = "SMS_DELIVERED";
 
-                               // playSound
+                    PendingIntent sentPI = PendingIntent.getBroadcast(MainActivity.this, 0,
+                            new Intent(SENT), 0);
 
-                                AssetFileDescriptor afd = getAssets().openFd("BirdNotificationTone.mp3");
-                                MediaPlayer player = new MediaPlayer();
-                                player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-                                player.prepare();
-                                player.start();
+                    PendingIntent deliveredPI = PendingIntent.getBroadcast(MainActivity.this, 0,
+                            new Intent(DELIVERED), 0);
 
-                                //Call Action
-
-
-
-
-
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Toast.makeText(MainActivity.this, "Failed to send message", Toast.LENGTH_SHORT).show();
+                    //---when the SMS has been sent---
+                    registerReceiver(new BroadcastReceiver(){
+                        @Override
+                        public void onReceive(Context arg0, Intent arg1) {
+                            switch (getResultCode())
+                            {
+                                case Activity.RESULT_OK:
+                                    Toast.makeText(getBaseContext(), "SMS sent",
+                                            Toast.LENGTH_SHORT).show();
+                                    break;
+                                case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                                    Toast.makeText(getBaseContext(), "Generic failure",
+                                            Toast.LENGTH_SHORT).show();
+                                    break;
+                                case SmsManager.RESULT_ERROR_NO_SERVICE:
+                                    Toast.makeText(getBaseContext(), "No service",
+                                            Toast.LENGTH_SHORT).show();
+                                    break;
+                                case SmsManager.RESULT_ERROR_NULL_PDU:
+                                    Toast.makeText(getBaseContext(), "Null PDU",
+                                            Toast.LENGTH_SHORT).show();
+                                    break;
+                                case SmsManager.RESULT_ERROR_RADIO_OFF:
+                                    Toast.makeText(getBaseContext(), "Radio off",
+                                            Toast.LENGTH_SHORT).show();
+                                    break;
                             }
                         }
-                        else
-                        {
-                            requestPermissions(new String[]{Manifest.permission.SEND_SMS},1);
-                        }
-                    }
+                    }, new IntentFilter(SENT));
 
+                    //---when the SMS has been delivered---
+                    registerReceiver(new BroadcastReceiver(){
+                        @Override
+                        public void onReceive(Context arg0, Intent arg1) {
+                            switch (getResultCode())
+                            {
+                                case Activity.RESULT_OK:
+                                    Toast.makeText(getBaseContext(), "SMS delivered",
+                                            Toast.LENGTH_SHORT).show();
+                                    try {
+                                        AssetFileDescriptor afd = getAssets().openFd("BirdNotificationTone.mp3");
+                                        MediaPlayer player = new MediaPlayer();
+                                        player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                                        player.prepare();
+                                        player.start();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                case Activity.RESULT_CANCELED:
+                                    Toast.makeText(getBaseContext(), "SMS not delivered",
+                                            Toast.LENGTH_SHORT).show();
+
+                                    break;
+                            }
+                        }
+                    }, new IntentFilter(DELIVERED));
+
+                    SmsManager sms = SmsManager.getDefault();
+                    sms.sendTextMessage(Mob01, null, SMS, sentPI, deliveredPI);
+                    sms.sendTextMessage(Mob02, null, SMS, sentPI, deliveredPI);
+                    sms.sendTextMessage(Mob03, null, SMS, sentPI, deliveredPI);
+                }
 
 
                 }
 
-            }
+
 
 
 
