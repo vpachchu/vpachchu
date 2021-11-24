@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                             Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
 
                                         }
-                                    }, 80000);
+                                    }, 100000);
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                             Toast.makeText(MainActivity.this, "number dialed", Toast.LENGTH_SHORT).show();
 
                                         }
-                                    }, 110000);
+                                    }, 170000);
 
 //                                handler.postDelayed(new Runnable() {
 //                                    @Override
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //                    Intent callintent=new Intent(Intent.ACTION_CALL);
 //                    callintent.setData(Uri.parse("tel:0772540515"));
                     //test2.setText(mob01);
-                   String SMS="This is an Emergency! Please Help me to prevent from This situation! Track my location Using With you! application, enter UserName : '"+username+"'";
+                   String SMS="This is an Emergency! Please Help me to prevent from This situation! . Track my location Using With you! application, enter UserName : '"+username+"'";
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                        if(checkSelfPermission(Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_GRANTED)
 //                        {
