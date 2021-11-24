@@ -126,7 +126,7 @@ public class CallReceiver extends BroadcastReceiver {
                     }
 
                 }
-            }, 45000);
+            }, 10000);
 
 
         } catch (Exception e) {
